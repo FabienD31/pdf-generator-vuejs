@@ -1,4 +1,4 @@
-# test-pdf
+# pdf-generator-vuejs
 
 ## Project setup
 ```
