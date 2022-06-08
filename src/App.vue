@@ -201,6 +201,13 @@ export default {
         head: [['Date', 'Numéro de commande', 'Prix total TTC']],
         body: this.data.map((el) => [el.dateOrder, el.orderNumber, el.totalAmount]),
         pageBreak: 'auto',
+        headStyles: {
+          fillColor: [181, 229, 220],
+          textColor: 0,
+          fontStyle: 'bold',
+          valign: 'middle',
+          fontSize: 8
+        },
         
       //nb pages
       didDrawPage: function (data){
