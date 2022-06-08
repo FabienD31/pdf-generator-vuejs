@@ -7,8 +7,11 @@
 </template>
 
 <script>
-import jsPDF from 'jspdf'
+import jsPDF from 'jspdf';
+import autoTable from 'jspdf-autotable';
+
 export default {
+
 	data() {
 		return {
       name: '',
@@ -23,12 +26,137 @@ export default {
         city: "Toulouse",
         siret: "56789123456789",
       },
+   
       amountOrderTTC: 20,
       commissionHT: 0,
       tva20: 0,
       commissionTTC: 0,
       com:5,
+      data: [
+       {
+          orderNumber: "Commande 1",
+          dateOrder: "01/01/2020",
+          totalAmount: 10,
+        },
+        {
+          orderNumber: "Commande 2",
+          dateOrder: "09/01/2025",
+          totalAmount: 100,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
 
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+                {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },{
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+ {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },{
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+               {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },{
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+ {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+         {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+
+        {
+          orderNumber: "Commande 3",
+          dateOrder: "01/01/2020",
+          totalAmount: 80,
+        },
+    ]
 		}
   },
   mounted() {
@@ -52,6 +180,7 @@ export default {
     
     download() { 
       var doc = new jsPDF();
+
       doc.addImage(this.img, 'PNG', 10, 5, 80, 30);
       doc.setFontSize(11);
       //header
@@ -64,29 +193,69 @@ export default {
       doc.text(this.pharmacy.city, 33, 77);
       doc.text("Siret : " + this.pharmacy.siret, 20, 83);
       //Array of order
+  
+
+      autoTable(doc, ({
+        startY: 100,
+        theme: 'grid',
+        head: [['Date', 'Numéro de commande', 'Prix total TTC']],
+        body: this.data.map((el) => [el.dateOrder, el.orderNumber, el.totalAmount]),
+        pageBreak: 'auto',
+        
+      //nb pages
+      didDrawPage: function (data){
+        var str = "Page " + doc.internal.getNumberOfPages();
+        var pageSize = doc.internal.pageSize;
+        var pageHeight = pageSize.height
+          ? pageSize.height
+          : pageSize.getHeight();
+        doc.text(str , data.settings.margin.left, pageHeight - 10);
+        
+      }
+      }));
+      
+      // console.log(JSON.stringify(doc.autoTable.previous.finalY));
+      const previousY = doc.autoTable.previous.finalY;
+      if (previousY > 199) {
+        doc.addPage();
       //Amount
-      doc.text("Montant total : " + this.amountOrderTTC, 130, 195);
-      doc.text("Commission " +this.com+"% HT : " + this.commissionHT, 130, 200);
-      doc.text("TVA 20% : " + this.tva20, 130, 205);
-      doc.text("Commission TTC : " + this.commissionTTC, 130, 210);
-      //Footer
-      doc.text("BLUE ALPHABET", 100, 268, "center");
-      doc.text("Société par actions simplifiés", 100, 274, "center");
-      doc.text("au capital de 1000€ (mille euros)", 100, 280, "center");
-      doc.text("Siège social: 13 RUE SAINT-URSULE 31000 Toulouse", 100, 286, "center");
-      doc.text("RCS de Toulouse sous le numéro B 882 622 871", 100, 292, "center");
-      //CGV
+      doc.text("Montant total : " + this.amountOrderTTC, 130,  20);
+      doc.text("Commission " +this.com+"% HT : " + this.commissionHT, 130, 25);
+      doc.text("TVA 20% : " + this.tva20, 130,  30);
+        doc.text("Commission TTC : " + this.commissionTTC, 130, 35);
+
       doc.setFontSize(9);
-      doc.text("En votre aimable règlement", 20, 226);
-      doc.text("Cordialement,", 20, 230);
-      doc.text("Conditions de règlement : paiement à reception de facture", 20, 234);
-      doc.text("Aucun escompte consenti pour règlement anticipé", 20, 238);
-      doc.text("Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de", 20, 242);
-      doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigeur au moment de l'incident.", 20, 246);
-      doc.text("Indémnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, 250);
+      doc.text("En votre aimable règlement", 20,  46);
+      doc.text("Cordialement,", 20,  50);
+      doc.text("Conditions de règlement : paiement à reception de facture", 20, 54);
+      doc.text("Aucun escompte consenti pour règlement anticipé", 20,  58);
+      doc.text("Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de", 20, 62);
+      doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigeur au moment de l'incident.", 20, 66);
+      doc.text("Indémnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, 70);
+        
+      } else {
+        doc.text("Montant total : " + this.amountOrderTTC, 130, doc.lastAutoTable.finalY + 20);
+        doc.text("Commission " +this.com+"% HT : " + this.commissionHT, 130, doc.lastAutoTable.finalY + 25);
+        doc.text("TVA 20% : " + this.tva20, 130, doc.lastAutoTable.finalY + 30);
+        doc.text("Commission TTC : " + this.commissionTTC, 130, doc.lastAutoTable.finalY + 35);
 
-
-
+         //CGV
+      doc.setFontSize(9);
+      doc.text("En votre aimable règlement", 20, doc.lastAutoTable.finalY + 46);
+      doc.text("Cordialement,", 20, doc.lastAutoTable.finalY + 50);
+      doc.text("Conditions de règlement : paiement à reception de facture", 20, doc.lastAutoTable.finalY + 54);
+      doc.text("Aucun escompte consenti pour règlement anticipé", 20, doc.lastAutoTable.finalY + 58);
+      doc.text("Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de", 20, doc.lastAutoTable.finalY + 62);
+      doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigeur au moment de l'incident.", 20, doc.lastAutoTable.finalY + 66);
+      doc.text("Indémnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, doc.lastAutoTable.finalY + 70);
+      }
+      //Footer
+      doc.text("BLUE ALPHABET", 100, doc.internal.pageSize.height - 21, "center");
+      doc.text("Société par actions simplifiés", 100, doc.internal.pageSize.height - 17, "center");
+      doc.text("au capital de 1000€ (mille euros)", 100, doc.internal.pageSize.height - 13, "center");
+      doc.text("Siège social: 13 RUE SAINT-URSULE 31000 Toulouse", 100, doc.internal.pageSize.height - 9, "center");
+      doc.text("RCS de Toulouse sous le numéro B 882 622 871", 100, doc.internal.pageSize.height - 5, "center");
+     
 
       window.open(URL.createObjectURL(doc.output("blob")))
       // doc.save(`Facture/${this.nbRandom}/${this.date}/${this.siret}.pdf`);
@@ -95,14 +264,3 @@ export default {
   }
 }
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>
