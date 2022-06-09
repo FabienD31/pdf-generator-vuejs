@@ -27,7 +27,7 @@ export default {
         siret: "56789123456789",
       },
    
-      amountOrderTTC: 20,
+      amountOrderTTC: 0,
       commissionHT: 0,
       tva20: 0,
       commissionTTC: 0,
@@ -48,120 +48,13 @@ export default {
           dateOrder: "01/01/2020",
           totalAmount: 80,
         },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-                {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },{
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
- {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },{
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-               {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },{
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
- {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-         {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
-
-        {
-          orderNumber: "Commande 3",
-          dateOrder: "01/01/2020",
-          totalAmount: 80,
-        },
     ]
 		}
   },
   mounted() {
     this.date = new Date().toLocaleDateString();
     this.nbRandom = Math.floor(Math.random() * 1000000);
+    this.calculateTotalAmount();
     this.calculateCommission();
     this.calculateTva();
     this.calculateCommissionTTC();
@@ -176,6 +69,11 @@ export default {
     },
     calculateCommissionTTC() {
       this.commissionTTC = ((this.amountOrderTTC * (this.com/100)) + (this.commissionHT * 0.2)).toFixed(2);
+    },
+    calculateTotalAmount() {
+      this.data.forEach(element => {
+        this.amountOrderTTC += element.totalAmount;
+      });
     },
     
     download() { 
@@ -206,14 +104,14 @@ export default {
           textColor: 0,
           fontStyle: 'bold',
           valign: 'middle',
-          fontSize: 8
+          fontSize: 11
         },
         
       //nb pages
       didDrawPage: function (data){
-        var str = "Page " + doc.internal.getNumberOfPages();
-        var pageSize = doc.internal.pageSize;
-        var pageHeight = pageSize.height
+        const str = "Page " + doc.internal.getNumberOfPages();
+        const pageSize = doc.internal.pageSize;
+        const pageHeight = pageSize.height
           ? pageSize.height
           : pageSize.getHeight();
         doc.text(str , data.settings.margin.left, pageHeight - 10);
@@ -234,11 +132,11 @@ export default {
       doc.setFontSize(9);
       doc.text("En votre aimable règlement", 20,  46);
       doc.text("Cordialement,", 20,  50);
-      doc.text("Conditions de règlement : paiement à reception de facture", 20, 54);
+      doc.text("Conditions de règlement : paiement à réception de facture", 20, 54);
       doc.text("Aucun escompte consenti pour règlement anticipé", 20,  58);
       doc.text("Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de", 20, 62);
-      doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigeur au moment de l'incident.", 20, 66);
-      doc.text("Indémnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, 70);
+      doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigueur au moment de l'incident.", 20, 66);
+      doc.text("Indemnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, 70);
         
       } else {
         doc.text("Montant total : " + this.amountOrderTTC, 130, doc.lastAutoTable.finalY + 20);
@@ -255,6 +153,7 @@ export default {
       doc.text("Tout incident de paiement est passible d'intérêt de retard. Le montant des pénalités résulte de", 20, doc.lastAutoTable.finalY + 62);
       doc.text("l'application aux sommes restant dues d'un taux d'intérêt légal en vigeur au moment de l'incident.", 20, doc.lastAutoTable.finalY + 66);
       doc.text("Indémnité forfaitaire pour frais de recouvrement due au créancier en cas de retard de paiement : 40€", 20, doc.lastAutoTable.finalY + 70);
+
       }
       //Footer
       doc.text("BLUE ALPHABET", 100, doc.internal.pageSize.height - 21, "center");
@@ -264,7 +163,7 @@ export default {
       doc.text("RCS de Toulouse sous le numéro B 882 622 871", 100, doc.internal.pageSize.height - 5, "center");
      
 
-      window.open(URL.createObjectURL(doc.output("blob")))
+      window.open(URL.createObjectURL(doc.output("blob"))) //for dev
       // doc.save(`Facture/${this.nbRandom}/${this.date}/${this.siret}.pdf`);
     }
 
